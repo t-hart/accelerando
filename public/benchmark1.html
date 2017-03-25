@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>Accelerando</title>
+</head>
+
+<body>
+<br>
+<IMG SRC="LOGO.png" ALT="logo" WIDTH=366 HEIGHT=109>
+<h1>Accelerando Benchmark #1</h1>
+<hr>
+<h2>Game Design Document</h2>
+
+<p><strong>by Nicholas Castello, Timothy Hart, Charles Phillips</strong></p>
+<br>
+<p><strong>Introduction</strong></p>
+<p>This document describes a game called "Accelerando", which is designed to be a simple, 2D side-scroller, appealing to introductory musicians or anyone with an interest to learn music. This game was created as an exercise to help players learn and identify notes on a staff. Accelerando takes learning music and puts it in a fun game that will keep users coming back to beat their previous time and as a result, increase their knowledge of music. The game will encompass sprite-based animation, collision detection, physics and memory management. </p>
+<br>
+<p><strong>Technology</strong></p>
+<p>Accelerando will be developed as a Web Application using the Phaser Game Engine. The graphics will be done in Adobe PhotoShop. </p>
+<br>
+<p><strong>Backstory</strong></p>
+<p>Salieri Stafferson lives an ordinary life in Vienna, Austria. He is a top musician and is almost done with his composition which he must present to the Royal Court the next day. Salieri decides to go on a quick walk for inspiration, when he notices something strange. His scientist neighbor, Atom Petridish&rsquo;s house is glowing red and playing jazz music. Atom hated jazz so Salieri knew something was up. He went to check it out and was sucked off of his feet and into a portal. He had entered Staff World. Everything was made out of music notes and staves. Salieri needed to escape so he could finish his composition by tomorrow. Just then, Bach came out of nowhere and started chasing Salieri! Salieri must stay alive and make it through all the levels of Staff World to get back to his home in Vienna to complete his composition for the Royal Court. </p>
+<br>
+<p><strong>Objective</strong></p>
+<p>Mr. Stafferson&rsquo;s task in this game is to stay alive and get to the finish line as quickly as possible. He will run on top of the staff and throughout the level, will encounter notes on the staff which he will have to identify. Every time the user guesses incorrectly, Mr. Stafferson&rsquo;s velocity decreases and Mr. Stafferson gets closer to being eaten. If multiple notes are guessed correctly in a row, a combo multiplier will be applied and Mr. Stafferson&rsquo;s velocity will be increased. Each level will get increasingly difficult, encompassing more aspects of music notation. At the end of the level, the total elapsed time will be displayed on the screen.</p>
+<br>
+<p><strong>GamePlay</strong></p>
+<p>The game will be a side-scroller where Mr. Stafferson will automatically be running on the staff. The user will control the speed based on the accuracy of his/her answers in identifying the notes. </p>
+<p>The user first will chose either treble clef or bass clef mode which will determine the type of staff they read off of. Next, the user will choose which level they play.</p>
+<ul>
+<li>Level 1:</li>
+<ul>
+<li>Treble Clef Mode:</li>
+<ul>
+<li>Mr. Stafferson will encounter notes ranging from E4 to F5 (only on the treble clef staff). The staff will be in the key of C (no sharps or flats), making this the easiest level. </li>
+</ul>
+<li>Bass Clef Mode:</li>
+<ul>
+<li>Mr. Stafferson will encounter notes ranging from G2 to A3 (only on the Bass clef staff). The staff will be in the key of C (no sharps or flats).</li>
+</ul>
+</ul>
+<li>Level 2:</li>
+<ul>
+<li>Treble Clef Mode:</li>
+<ul>
+<li>Similar to Level 1, all notes will be between E4 to F5, however, now Mr. Stafferson will be in different key signatures. The user will now have to identify the note, as well as specify if it it sharp, natural, or flat, based on the key signature. The key signature will change throughout the level.</li>
+</ul>
+<li>Bass Clef Mode:</li>
+<ul>
+<li>Similar to Level 1, all notes will be between G2 to A3, however, now Mr. Stafferson will be in different key signatures. The user will now have to identify the note, as well as specify if it it sharp, natural, or flat, based on the key signature. The key signature will change throughout the level.</li>
+</ul>
+</ul>
+<li>Level 3:</li>
+<ul>
+<li>Treble Clef Mode:</li>
+<ul>
+<li>Level 3 will be the most challenging level with key signatures and now notes appearing on ledger lines as well. The notes will range from F3 (3 ledger lines below the treble clef staff) to E6 (3 ledger lines above the treble clef staff).</li>
+</ul>
+<li>Bass Clef Mode:</li>
+<ul>
+<li>Level 3 will be the most challenging level with key signatures and now notes appearing on ledger lines as well. The notes will range from A1 (3 ledger lines below the bass clef staff) to G4 (3 ledger lines above the bass clef staff).</li>
+</ul>
+</ul>
+</ul>
+<p>The user will have 5 seconds for a guess per note. If he/she runs out of time or guesses incorrectly, Mr. Stafferson&rsquo;s velocity is reduced. If his velocity gets low enough, he will be eaten by his enemy and lose the game. If the user guesses correctly 10 times in a row, Mr. Stafferson&rsquo;s velocity will be increased, moving his further from his enemy. </p>
+<br>
+<p><strong>Controls </strong></p>
+<p><strong>A </strong>- &ldquo;A&rdquo; note </p>
+<p><strong>B </strong>- &ldquo;B&rdquo; note</p>
+<p><strong>C </strong>- &ldquo;C&rdquo; note</p>
+<p><strong>D </strong>- &ldquo;D&rdquo; note</p>
+<p><strong>E </strong>- &ldquo;E&rdquo; note</p>
+<p><strong>F </strong>- &ldquo;F&rdquo; note</p>
+<p><strong>G </strong>- &ldquo;G&rdquo; note</p>
+<p><strong>Control </strong>- Flat note </p>
+<p><strong>Alt </strong>- Sharp note </p>
+<p><strong>Space </strong>- Jump (Maybe)</p>
+<br>
+<p><strong>Graphic User Interface</strong></p>
+<p>As far as the GUI is concerned, if we consider</p>
+<ul>
+<li><strong>Splash Screen </strong>- The splash screen GUI simply presents a game logo and a Start button for the user to press when they are ready to play. Upon pressing it, a brief scripted sequence is played explaining a little about Accelerando and the back story for the game. While playing the message "Press ESC to Skip" should be displayed at the bottom of the screen. If pressed, the game should immediately go to the Manu Menu.</li>
+<li><strong>Main Menu</strong> - The main menu GUI presents the game logo and 3 options: play, options, help. </li>
+<li><strong>Level Selection Menu</strong> - The level selection menu will present the user with the option to play level 1, level 2, or level 3.</li>
+<li><strong>Gameplay GUI </strong>- The gameplay GUI will consist of a large musical staff on screen. A small character will be running on the top line of the staff as the staff (and notes) scroll left. Score will be tallied in the top left. As the player gets quicker and quicker at identifying the correct notes, their speed (beats per minute - BPM) will be updated in the bottom right. The speed of the staff will be updated to reflect these changes. A pause button will be located on the bottom middle of the screen. On the top right of the screen a timer will be displayed. On the bottom left of the screen will be a &ldquo;map&rdquo; displaying how much of the song the player has gone through so far and how much remains.</li>
+<li><strong>Pause Menu</strong> - The pause menu GUI will present the user with 4 options: resume, options, help, main menu.</li>
+<li><strong>Help Menu</strong> - The help menu will contain a document to teach the player about the elements taught in the specific level.</li>
+<li><strong>Controls Menu</strong> - The controls menu will show what/how controls are used to play the game. </li>
+</ul>
+<br>
+<p><strong>Artwork</strong></p>
+<ul>
+<li>Salieri Stafferson</li>
+<ul>
+<li>Walking right animation</li>
+<li>Jumping animation </li>
+<li>Dying animation </li>
+<li>Victory animation </li>
+</ul>
+<li>Bach </li>
+<ul>
+<li>Eating Stafferson </li>
+</ul>
+<li>Game World</li>
+<ul>
+<li>Staff</li>
+<li>Clef</li>
+<li>Notes</li>
+<li>Velocity indicator</li>
+<li>Map</li>
+</ul>
+<li>Menu </li>
+<ul>
+<li>Logo</li>
+<li>Intro animations</li>
+</ul>
+</ul>
+<br>
+<p><strong>Sound Effects</strong></p>
+<ul>
+<li>Level select sound </li>
+<li>Piano sound corresponding to notes on staff</li>
+<li>Correct guess sound </li>
+<li>Incorrect guess sound </li>
+<li>Speed up sound </li>
+<li>Slow down sound </li>
+<li>Streak multiplier sound </li>
+<li>Mr. Stafferson gets eaten sound </li>
+<li>Lose sound </li>
+<li>Win sound </li>
+</ul>
+<br>
+<p><strong>Music </strong></p>
+<ul>
+<li>Music for main menu </li>
+</ul>
+<hr>
+<h2>Wireframes</h2>
+<p><strong>Splash Page</strong></p>
+<IMG SRC="splash.png" ALT="splash" WIDTH=800 HEIGHT=450>
+<p><strong>Main Menu</strong></p>
+<IMG SRC="mainmenu.png" ALT="mainmenu" WIDTH=800 HEIGHT=450>
+<p><strong>Level Selection</strong></p>
+<IMG SRC="levelselection.png" ALT="levelselection" WIDTH=800 HEIGHT=450>
+<p><strong>Level 1</strong></p>
+<IMG SRC="level1.png" ALT="level1" WIDTH=800 HEIGHT=450>
+<p><strong>Level 2</strong></p>
+<IMG SRC="level2.png" ALT="level2" WIDTH=800 HEIGHT=450>
+<p><strong>Level 3</strong></p>
+<IMG SRC="level3.png" ALT="level3" WIDTH=800 HEIGHT=450>
+<p><strong>Pause Menu</strong></p>
+<IMG SRC="pause.png" ALT="pause" WIDTH=800 HEIGHT=450>
+<p><strong>Controls Menu</strong></p>
+<IMG SRC="controls.png" ALT="controls" WIDTH=800 HEIGHT=450>
+<p><strong>Help Menu</strong></p>
+<IMG SRC="help.png" ALT="help" WIDTH=800 HEIGHT=450>
+</body>
+</html>
