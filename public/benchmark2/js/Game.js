@@ -16,12 +16,48 @@ var _bKey;
 var _flatKey;
 var _sharpKey;
 
+var _audio;
+
+var noteEnum = {
+  c2 : 500,
+  d2 : 500,
+  e2 : 500,
+  f2 : 500,
+  g2 : 500,
+  a2 : 500,
+  b2 : 500,
+  c3 : 500,
+  d3 : 500,
+  e3 : 500,
+  f3 : 500,
+  g3 : 500,
+  a3 : 500,
+  b3 : 500,
+  c4 : 500,
+  d4 : 500,
+  e4 : 500,
+  f4 : 500,
+  g4 : 500,
+  a4 : 500,
+  b4 : 500,
+  c5 : 500,
+  d5 : 500,
+  e5 : 500,
+  f5 : 500,
+  g5 : 500,
+  a5 : 500,
+  b5 : 500
+};
+
 Accelerando.Game = function(){};
 
 Accelerando.Game.prototype = {
   create: function() {
+    levelJSON = this.game.cache.getJSON('levelData');
+    console.log(levelJSON.levels[0].notes);
     this.createUI();
     this.initKeys();
+    this.initAudioPlayer();
   },
 
   update: function() {
@@ -30,6 +66,7 @@ Accelerando.Game.prototype = {
       this.updateTimer(miliSeconds);
       console.log('update');
     }
+    var qNote = this.game.add.sprite(this.game.width/2, this.game.height/2, 'quarter_note');
   },
 
   createUI: function() {
@@ -84,7 +121,10 @@ Accelerando.Game.prototype = {
   },
 
   pauseGame: function(){
-    console.log('pause button pressed');
+    if(_audio.paused)
+      _audio.play();
+    else
+      _audio.pause();
   },
 
   initKeys: function(){
@@ -97,5 +137,13 @@ Accelerando.Game.prototype = {
     _bKey = this.game.input.keyboard.addKey(Phaser.Keyboard.B);
     _flatKey = this.game.input.keyboard.addKey(Phaser.Keyboard.CONTROL);
     _sharpKey = this.game.input.keyboard.addKey(Phaser.Keyboard.ALT);
+  },
+
+  initAudioPlayer: function(){
+    _audio = new Audio();
+    _audio.src = "benchmark2/assets/audio/splash.mp3";
+    _audio.loop = true;
+    _audio.play();
+    _audio.playbackRate = 1;
   }
 };

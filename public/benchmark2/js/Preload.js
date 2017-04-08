@@ -24,6 +24,8 @@ Accelerando.Preload.prototype = {
     this.load.image('level1_button', 'benchmark2/assets/images/level1_button.png');
     this.load.image('level2_button', 'benchmark2/assets/images/level2_button.png');
     this.load.image('level3_button', 'benchmark2/assets/images/level3_button.png');
+    this.game.load.json('levelData', 'benchmark2/assets/levels/levels.json');
+    this.load.image('quarter_note', 'benchmark2/assets/images/quarter_note.png')
   },
   create: function() {
     this.state.start('Splash');
