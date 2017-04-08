@@ -18,20 +18,18 @@ var _sharpKey;
 
 var _audio;
 
-var _qNote;
-
 var _level1Notes;
 var _level1Duration;
 var _currentIndex = -1;
 var _start_of_waited_time = 0;
 var _waitedTime;
 var _notes;
-var _noteVelocity = -150;
+var _noteVelocity = 10;
 var _noteHeight;
 
 var _levelJSON;
 
-var _elapsedDistance;
+var _elapsedDistance = 1;
 
 Accelerando.Game = function(){};
 
@@ -52,15 +50,16 @@ Accelerando.Game.prototype = {
     }
 
     if(_currentIndex >= 0)
-      distToWait = _level1Duration[_currentIndex]*10;
+      distToWait = _level1Duration[_currentIndex]*100;
     else 
       distToWait = 0;
 
     if(distToWait <= _elapsedDistance)
       this.spawnNote();
 
+    _elapsedDistance += _noteVelocity;
     _notes.forEach(function(note){
-      note.x = note.x - 4;
+      note.x = note.x - _noteVelocity;
       if(note.x <= 400)
         note.kill();
     }, this);
@@ -153,32 +152,45 @@ Accelerando.Game.prototype = {
 
   spawnNote: function(){
     _currentIndex++;
-    _start_of_waited_time = this.time.now;
+    _elapsedDistance = 0;
     this.findNoteHeight();
-    qNote = this.game.add.sprite(this.game.width+40, _noteHeight, 'quarter_note');
-    qNote.anchor.y = 0.78823529411;
-    this.game.physics.enable(qNote, Phaser.Physics.ARCADE);
-    _notes.add(qNote);
+    if(_level1Duration[_currentIndex] == 1){
+      note = this.game.add.sprite(this.game.width+40, _noteHeight, 'quarter_note');
+      note.anchor.y = 0.78823529411;
+    }
+    else if(_level1Duration[_currentIndex] == 2){
+      note = this.game.add.sprite(this.game.width+40, _noteHeight, 'half_note');
+      note.anchor.y = 0.78823529411;
+    }
+    else if(_level1Duration[_currentIndex] == 3){
+
+    }
+    else if(_level1Duration[_currentIndex] == 4){
+      note = this.game.add.sprite(this.game.width+40, _noteHeight, 'whole_note');
+      note.anchor.y = 0.5;
+    }
+    this.game.physics.enable(note, Phaser.Physics.ARCADE);
+    _notes.add(note);
   },
 
   findNoteHeight: function(){
     var note = _level1Notes[_currentIndex];
-    if(note == "a2") _noteHeight = 840;
-    else if(note == "b2") _noteHeight = 802.5;
-    else if(note == "c3") _noteHeight = 765;
-    else if(note == "d3") _noteHeight = 727.5;
-    else if(note == "e3") _noteHeight = 690;
-    else if(note == "f3") _noteHeight = 652.5;
-    else if(note == "g3") _noteHeight = 615;
-    else if(note == "a3") _noteHeight = 577.5;
-    else if(note == "b3") _noteHeight = 540;
-    else if(note == "c4") _noteHeight = 502.5;
-    else if(note == "d4") _noteHeight = 465;
-    else if(note == "e4") _noteHeight = 427.5;
-    else if(note == "f4") _noteHeight = 390;
-    else if(note == "g4") _noteHeight = 352.5;
-    else if(note == "a4") _noteHeight = 315;
-    else if(note == "b4") _noteHeight = 277.5;
-    else if(note == "c5") _noteHeight = 240;
+    if(note == "a2") _noteHeight = 802.5;
+    else if(note == "b2") _noteHeight = 765;
+    else if(note == "c3") _noteHeight = 727.5;
+    else if(note == "d3") _noteHeight = 690;
+    else if(note == "e3") _noteHeight = 652.5;
+    else if(note == "f3") _noteHeight = 615;
+    else if(note == "g3") _noteHeight = 577.5;
+    else if(note == "a3") _noteHeight = 540;
+    else if(note == "b3") _noteHeight = 502.5;
+    else if(note == "c4") _noteHeight = 465;
+    else if(note == "d4") _noteHeight = 427.5;
+    else if(note == "e4") _noteHeight = 390;
+    else if(note == "f4") _noteHeight = 352.5;
+    else if(note == "g4") _noteHeight = 315;
+    else if(note == "a4") _noteHeight = 277.5;
+    else if(note == "b4") _noteHeight = 240;
+    else if(note == "c5") _noteHeight = 202.5;
   }
 };
