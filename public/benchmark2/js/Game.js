@@ -18,55 +18,52 @@ var _sharpKey;
 
 var _audio;
 
-var noteEnum = {
-  c2 : 500,
-  d2 : 500,
-  e2 : 500,
-  f2 : 500,
-  g2 : 500,
-  a2 : 500,
-  b2 : 500,
-  c3 : 500,
-  d3 : 500,
-  e3 : 500,
-  f3 : 500,
-  g3 : 500,
-  a3 : 500,
-  b3 : 500,
-  c4 : 500,
-  d4 : 500,
-  e4 : 500,
-  f4 : 500,
-  g4 : 500,
-  a4 : 500,
-  b4 : 500,
-  c5 : 500,
-  d5 : 500,
-  e5 : 500,
-  f5 : 500,
-  g5 : 500,
-  a5 : 500,
-  b5 : 500
-};
+var _qNote;
+
+var _level1Notes;
+var _level1Duration;
+var _currentIndex = -1;
+var _start_of_waited_time = 0;
+var _waitedTime;
+var _notes;
+var _noteVelocity = -150;
+var _noteHeight;
+
+var _levelJSON;
+
+var _elapsedDistance;
 
 Accelerando.Game = function(){};
 
 Accelerando.Game.prototype = {
   create: function() {
-    levelJSON = this.game.cache.getJSON('levelData');
-    console.log(levelJSON.levels[0].notes);
+    this.getLevelData();
     this.createUI();
     this.initKeys();
     this.initAudioPlayer();
+
+    _notes = this.game.add.group();
   },
 
   update: function() {
     var miliSeconds = this.time.now - _startTime;
     if(miliSeconds-1000 > ((_seconds*1000) + (_minutes*60*1000)) ){
       this.updateTimer(miliSeconds);
-      console.log('update');
     }
-    var qNote = this.game.add.sprite(this.game.width/2, this.game.height/2, 'quarter_note');
+
+    if(_currentIndex >= 0)
+      distToWait = _level1Duration[_currentIndex]*10;
+    else 
+      distToWait = 0;
+
+    if(distToWait <= _elapsedDistance)
+      this.spawnNote();
+
+    _notes.forEach(function(note){
+      note.x = note.x - 4;
+      if(note.x <= 400)
+        note.kill();
+    }, this);
   },
 
   createUI: function() {
@@ -79,6 +76,7 @@ Accelerando.Game.prototype = {
     staff = this.game.add.group();
     for(var i = 0; i < 5; i++){
       var staffLine = this.game.add.sprite(0, (this.game.height/2)+(i*lineOffset)-(lineOffset*2.5), 'staff_line');
+      staffLine.anchor.y = 0.5;
       staffLine.scale.setTo(192, 0.5);
       staff.add(staffLine);
     }
@@ -145,5 +143,42 @@ Accelerando.Game.prototype = {
     _audio.loop = true;
     _audio.play();
     _audio.playbackRate = 1;
+  },
+
+  getLevelData: function(){
+    _levelJSON = this.game.cache.getJSON('levelData');
+    _level1Notes = _levelJSON.levels[0].notes;
+    _level1Duration = _levelJSON.levels[0].duration;
+  },
+
+  spawnNote: function(){
+    _currentIndex++;
+    _start_of_waited_time = this.time.now;
+    this.findNoteHeight();
+    qNote = this.game.add.sprite(this.game.width+40, _noteHeight, 'quarter_note');
+    qNote.anchor.y = 0.78823529411;
+    this.game.physics.enable(qNote, Phaser.Physics.ARCADE);
+    _notes.add(qNote);
+  },
+
+  findNoteHeight: function(){
+    var note = _level1Notes[_currentIndex];
+    if(note == "a2") _noteHeight = 840;
+    else if(note == "b2") _noteHeight = 802.5;
+    else if(note == "c3") _noteHeight = 765;
+    else if(note == "d3") _noteHeight = 727.5;
+    else if(note == "e3") _noteHeight = 690;
+    else if(note == "f3") _noteHeight = 652.5;
+    else if(note == "g3") _noteHeight = 615;
+    else if(note == "a3") _noteHeight = 577.5;
+    else if(note == "b3") _noteHeight = 540;
+    else if(note == "c4") _noteHeight = 502.5;
+    else if(note == "d4") _noteHeight = 465;
+    else if(note == "e4") _noteHeight = 427.5;
+    else if(note == "f4") _noteHeight = 390;
+    else if(note == "g4") _noteHeight = 352.5;
+    else if(note == "a4") _noteHeight = 315;
+    else if(note == "b4") _noteHeight = 277.5;
+    else if(note == "c5") _noteHeight = 240;
   }
 };
