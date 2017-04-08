@@ -10,7 +10,7 @@ Accelerando.Boot.prototype = {
   },
   create: function() {
     //loading screen will have a white background
-    this.game.stage.backgroundColor = '#000';
+    this.game.stage.backgroundColor = '#E1EDCF';
 
     //scaling options
     this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
