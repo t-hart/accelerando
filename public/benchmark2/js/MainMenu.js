@@ -69,6 +69,7 @@ Accelerando.MainMenu.prototype = {
 	},
 
 	loadHelp: function(){
+		this.state.start('HelpMenu', true, false, _audio);
 
 	}
 
