@@ -38,6 +38,10 @@ Accelerando.Preload.prototype = {
     this.load.image('back_button', 'benchmark2/assets/images/back_button.png');
     this.load.image('controls', 'benchmark2/assets/images/controls.png');
     this.load.image('finish_flag', 'benchmark2/assets/images/finish_flag.png');
+    this.load.image('help_info', 'benchmark2/assets/images/help_info.png');
+    this.load.image('border', 'benchmark2/assets/images/border.png');
+    
+    
   },
   create: function() {
     this.state.start('Splash');
