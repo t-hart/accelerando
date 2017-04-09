@@ -28,6 +28,11 @@ Accelerando.Preload.prototype = {
     this.load.image('quarter_note', 'benchmark2/assets/images/quarter_note.png');
     this.load.image('half_note', 'benchmark2/assets/images/half_note.png');
     this.load.image('whole_note', 'benchmark2/assets/images/whole_note.png');
+    this.game.load.spritesheet('bach', 'benchmark2/assets/images/bach_spritesheet.png', 64, 64);
+    this.load.image('blue_bar', 'benchmark2/assets/images/blue_bar.png');
+    this.game.load.spritesheet('salieri', 'benchmark2/assets/images/salieri_spritesheet.png', 64, 64);
+    this.load.image('back_button', 'benchmark2/assets/images/back_button.png');
+    this.load.image('controls', 'benchmark2/assets/images/controls.png');
   },
   create: function() {
     this.state.start('Splash');

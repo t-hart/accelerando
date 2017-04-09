@@ -1,3 +1,5 @@
+var _audio;
+
 Accelerando.Splash = function(){};
 
 Accelerando.Splash.prototype = {
@@ -10,6 +12,11 @@ Accelerando.Splash.prototype = {
 		playButton.anchor.y = 0.5;
 		playButton.inputEnabled = true;
 		playButton.events.onInputDown.add(this.loadMainMenu, this);
+
+		_audio = new Audio();
+		_audio.src = "benchmark2/assets/audio/main.mp3";
+		_audio.play();
+		_audio.loop = true;
 	},
 
 	update: function(){
@@ -17,7 +24,8 @@ Accelerando.Splash.prototype = {
 	},
 
 	loadMainMenu: function(){
-		this.state.start('MainMenu');
+		_audio.pause();
+		this.state.start('MainMenu', true, false, _audio);
 	}
 
 }

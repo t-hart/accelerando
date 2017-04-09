@@ -1,6 +1,12 @@
+var _audio;
+
 Accelerando.MainMenu = function(){};
 
 Accelerando.MainMenu.prototype = {
+	init: function(audio){
+		_audio = audio;
+	},
+
 	create: function(){
 		var logo = this.game.add.sprite(this.world.width/2, this.world.height/3, 'logo');
 		logo.anchor.x = 0.5;
@@ -21,6 +27,9 @@ Accelerando.MainMenu.prototype = {
 		helpButton.inputEnabled = true;
 		helpButton.events.onInputDown.add(this.loadHelp, this);
 
+		_audio.play();
+		_audio.loop = true;
+
 	},
 
 	update: function(){
@@ -28,11 +37,11 @@ Accelerando.MainMenu.prototype = {
 	},
 
 	loadLevelSelection: function(){
-		this.state.start('LevelSelection');
+		this.state.start('LevelSelection', true, false, _audio);
 	},
 
 	loadControls: function(){
-
+		this.state.start('ControlsMenu', true, false, _audio);
 	},
 
 	loadHelp: function(){
