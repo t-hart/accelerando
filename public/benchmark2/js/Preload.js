@@ -33,6 +33,7 @@ Accelerando.Preload.prototype = {
     this.game.load.spritesheet('salieri', 'benchmark2/assets/images/salieri_spritesheet.png', 64, 64);
     this.load.image('back_button', 'benchmark2/assets/images/back_button.png');
     this.load.image('controls', 'benchmark2/assets/images/controls.png');
+    this.load.image('finish_flag', 'benchmark2/assets/images/finish_flag.png');
   },
   create: function() {
     this.state.start('Splash');

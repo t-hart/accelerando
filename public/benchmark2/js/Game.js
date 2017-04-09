@@ -25,7 +25,7 @@ var _currentIndex = -1;
 var _start_of_waited_time = 0;
 var _waitedTime;
 var _notes;
-var _noteVelocity = 2;
+var _noteVelocity = 8;
 var _noteHeight;
 var _noteFreq = 0;
 var _playedNoteIndex = 0;
@@ -42,75 +42,88 @@ var _oscillator;
 
 var _paused = false;
 var _pausedTime;
+var _piano;
 
 Accelerando.Game = function(){};
 
 Accelerando.Game.prototype = {
+
+  /* INIT FUNCTION TAKES LEVEL PARAM */
   init: function(level){
+    
     this.getLevelData(level);
   },
 
+  /* CREATE FUNCTION */
   create: function() {
     
+    _piano = new Wad({
+      source : 'sine',
+      env : {
+        attack : 0,
+        decay : .6,
+        hold : 1,
+        sustain : 0,
+        release : 0
+      }
+    });
+
     this.createUI();
     this.initKeys();
 
-    _context = new AudioContext;
-    _oscillator = _context.createOscillator();
-    _oscillator.connect(_context.destination);
-    _oscillator.frequency.value = 0;
-    _oscillator.start(0);
-
+    /* CREATE SPRITES */
     _bach = this.game.add.sprite(150, 220, 'bach');
     _bach.animations.add('run', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], 10, true);
     _bach.scale.setTo(2);
-
     _salieri = this.game.add.sprite(300, 220, 'salieri');
     _salieri.animations.add('run', [0, 1, 2, 3, 4, 5], 10, true);
     _salieri.animations.add('die', [6, 7], 10, true);
     _salieri.animations.add('win', [6, 7, 8, 9], 10, true);
     _salieri.scale.setTo(2);
-
     _notes = this.game.add.group();
   },
 
+  /* UPDATE FUNCTION */
   update: function() {
-
-    if(!_paused){
-    _fKey.onDown.add(this.reader,this);
-    _gKey.onDown.add(this.reader,this);
-    _aKey.onDown.add(this.reader,this);
-    _bKey.onDown.add(this.reader,this);
-    _cKey.onDown.add(this.reader,this);
-    _dKey.onDown.add(this.reader,this);
-    _eKey.onDown.add(this.reader,this);
-
-    var miliSeconds = this.time.now - _startTime;
-    if(miliSeconds-1000 > ((_seconds*1000) + (_minutes*60*1000)) ){
-      this.updateTimer(miliSeconds);
-    }
-
-    if(_currentIndex >= 0)
-      distToWait = _level1Duration[_currentIndex]*100;
-    else 
-      distToWait = 0;
-
-    if(distToWait <= _elapsedDistance)
-      this.spawnNote();
-
-    _elapsedDistance += _noteVelocity;
-    _notes.forEach(function(note){
-      note.x = note.x - _noteVelocity;
-      if(note.x <= 400){
-        note.destroy();
-        _score-=10;
-        _salieri.x-=10;
-        _scoreText.setText("SCORE: " + _score);
-        this.playNote();
-      }
-    }, this);
-
     
+    if(!_paused){
+      /* READS USER KEYBOARD INPUT */
+      _fKey.onDown.add(this.reader,this);
+      _gKey.onDown.add(this.reader,this);
+      _aKey.onDown.add(this.reader,this);
+      _bKey.onDown.add(this.reader,this);
+      _cKey.onDown.add(this.reader,this);
+      _dKey.onDown.add(this.reader,this);
+      _eKey.onDown.add(this.reader,this);
+
+      /* UPDATES TIMER EVERY 1 SECOND */
+      var miliSeconds = this.time.now - _startTime;
+      if(miliSeconds-1000 > ((_seconds*1000) + (_minutes*60*1000)) ){
+        this.updateTimer(miliSeconds);
+      }
+
+      /* SPAWN NOTE? */
+      if(_currentIndex >= 0)
+        distToWait = _level1Duration[_currentIndex]*100;
+      else 
+        distToWait = 0;
+      if(distToWait <= _elapsedDistance)
+        this.spawnNote();
+
+      /* MOVES, PLAYS, AND DESTROYS NOTES ONCE THEY HIT END OF BLUE BAR */
+      _elapsedDistance += _noteVelocity;
+      _notes.forEach(function(note){
+        note.x = note.x - _noteVelocity;
+        if(note.x <= 400){
+          note.destroy();
+          _score-=10;
+          _salieri.x-=10;
+          _scoreText.setText("SCORE: " + _score);
+          this.playNote();
+        }
+      }, this);
+
+
       _bach.animations.play('run');
       _salieri.animations.play('run');
     }
@@ -163,6 +176,11 @@ Accelerando.Game.prototype = {
     this.game.world.bringToTop(_scoreText);
 
     var bluebar = this.game.add.sprite(400, 305,'blue_bar');
+
+    var percentCompleteBar = this.game.add.sprite(70, this.game.world.height-100, 'staff_line');
+    percentCompleteBar.scale.setTo(50, 0.5)
+    var finishFlag = this.game.add.sprite(568, this.game.world.height-100, 'finish_flag');
+    finishFlag.anchor.y = 1;
     
   },
 
@@ -202,9 +220,16 @@ Accelerando.Game.prototype = {
 
   playNote: function(){
     this.findNoteFreq();
-    _oscillator.type = "sawtooth";
-    _oscillator.frequency.value = _noteFreq;
-    console.log(_level1Notes[_playedNoteIndex]);
+    if(_level1Notes[_playedNoteIndex-1].toUpperCase() != 'R'){
+      _piano.play({pitch : _level1Notes[_playedNoteIndex-1].toUpperCase()});
+    }
+    else{
+      _piano.stop();
+    }
+    // this.findNoteFreq();
+    // _oscillator.type = "sawtooth";
+    // _oscillator.frequency.value = _noteFreq;
+    // console.log(_level1Notes[_playedNoteIndex]);
   },
 
   getLevelData: function(level){
@@ -365,7 +390,7 @@ Accelerando.Game.prototype = {
         this.playNote();
         _salieri.x+=10;
       }
-      }
+    }
     ,this);
   }
 
