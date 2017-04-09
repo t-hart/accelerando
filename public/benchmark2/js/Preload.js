@@ -12,6 +12,10 @@ Accelerando.Preload.prototype = {
     this.load.setPreloadSprite(this.preloadBar);
 
     //load game assets
+    this.load.image('play_again','benchmark2/assets/images/play_again.png');
+    this.load.image('main_menu','benchmark2/assets/images/main_menu.png');
+    this.load.image('win_popup','benchmark2/assets/images/winpopup.png');
+    this.load.image('lose_popup','benchmark2/assets/images/losepopup.png');
     this.load.image('staff_line', 'benchmark2/assets/images/staff_line.png');
     this.load.image('treble_clef', 'benchmark2/assets/images/treble_clef.png');
     this.load.image('pause_button', 'benchmark2/assets/images/pause_button.png');
