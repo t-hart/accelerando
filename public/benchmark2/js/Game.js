@@ -44,6 +44,9 @@ var _paused = false;
 var _pausedTime;
 var _piano;
 
+var _gameOver = false;
+var _popUpShown = false;
+
 Accelerando.Game = function(){};
 
 Accelerando.Game.prototype = {
@@ -56,6 +59,7 @@ Accelerando.Game.prototype = {
 
   /* CREATE FUNCTION */
   create: function() {
+<<<<<<< HEAD
     
     _piano = new Wad({
       source : 'sine',
@@ -67,6 +71,8 @@ Accelerando.Game.prototype = {
         release : 0
       }
     });
+=======
+>>>>>>> efcacb8141adb4bd654ad6dc79512bf2215d3ce8
 
     this.createUI();
     this.initKeys();
@@ -85,6 +91,7 @@ Accelerando.Game.prototype = {
 
   /* UPDATE FUNCTION */
   update: function() {
+<<<<<<< HEAD
     
     if(!_paused){
       /* READS USER KEYBOARD INPUT */
@@ -101,6 +108,29 @@ Accelerando.Game.prototype = {
       if(miliSeconds-1000 > ((_seconds*1000) + (_minutes*60*1000)) ){
         this.updateTimer(miliSeconds);
       }
+=======
+
+    if(_score<0){_gameOver = true;}
+    if(!_paused || !_gameOver){
+
+    _fKey.onDown.add(this.reader,this);
+    _gKey.onDown.add(this.reader,this);
+    _aKey.onDown.add(this.reader,this);
+    _bKey.onDown.add(this.reader,this);
+    _cKey.onDown.add(this.reader,this);
+    _dKey.onDown.add(this.reader,this);
+    _eKey.onDown.add(this.reader,this);
+
+    var miliSeconds = this.time.now - _startTime;
+    if(miliSeconds-1000 > ((_seconds*1000) + (_minutes*60*1000)) ){
+      this.updateTimer(miliSeconds);
+    }
+
+    if(_currentIndex >= 0)
+      distToWait = _level1Duration[_currentIndex]*100;
+    else
+      distToWait = 0;
+>>>>>>> efcacb8141adb4bd654ad6dc79512bf2215d3ce8
 
       /* SPAWN NOTE? */
       if(_currentIndex >= 0)
@@ -124,14 +154,32 @@ Accelerando.Game.prototype = {
       }, this);
 
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> efcacb8141adb4bd654ad6dc79512bf2215d3ce8
       _bach.animations.play('run');
       _salieri.animations.play('run');
     }
-    else{
+
+    if(_gameOver){
       _bach.animations.stop();
       _salieri.animations.stop();
-    }
+      if(!_popUpShown){
+      if(_score<0){
+        var gr = this.game.add.sprite((this.world.width/2)-400, (this.world.height/2)-200, 'lose_popup');
+        var but = this.game.add.button(this.game.world.centerX+100,this.game.world.centerY+50,'main_menu',this.goToMainMenu,this);
+        var but2 = this.game.add.button(this.game.world.centerX+100,this.game.world.centerY-50,'play_again',this.playAgain,this);
+        }
+      else{var gr = this.game.add.sprite((this.world.width/2)-400, (this.world.height/2)-200, 'win_popup');}
+      this.pauseGame();
+      _popUpShown = true;
+    }}
   },
+
+
+
 
   createUI: function() {
     _startTime = this.time.now;
@@ -177,11 +225,14 @@ Accelerando.Game.prototype = {
 
     var bluebar = this.game.add.sprite(400, 305,'blue_bar');
 
+<<<<<<< HEAD
     var percentCompleteBar = this.game.add.sprite(70, this.game.world.height-100, 'staff_line');
     percentCompleteBar.scale.setTo(50, 0.5)
     var finishFlag = this.game.add.sprite(568, this.game.world.height-100, 'finish_flag');
     finishFlag.anchor.y = 1;
     
+=======
+>>>>>>> efcacb8141adb4bd654ad6dc79512bf2215d3ce8
   },
 
   updateTimer: function(miliSeconds) {
@@ -190,6 +241,14 @@ Accelerando.Game.prototype = {
     miliSeconds = miliSeconds - (_seconds*1000 + _minutes*60*1000);
     if(_seconds < 10) _seconds = "0"+_seconds;
     _timer.setText("TIMER: "+_minutes+":"+_seconds);
+  },
+
+  goToMainMenu: function(){
+    this.state.start('MainMenu', true, false, _audio);
+  },
+  playAgain: function(){
+    this.state.start('Game', true, false, 0);
+
   },
 
   pauseGame: function(){
@@ -286,7 +345,7 @@ Accelerando.Game.prototype = {
     else if(note == "a4") _noteHeight = 277.5;
     else if(note == "b4") _noteHeight = 240;
     else if(note == "c5") _noteHeight = 202.5;
-  }, 
+  },
 
   findNoteFreq : function(){
     var note = _level1Notes[_playedNoteIndex];
