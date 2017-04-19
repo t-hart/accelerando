@@ -5,8 +5,12 @@ Accelerando.Splash = function(){};
 
 Accelerando.Splash.prototype = {
 	create: function(){
+		var border = this.game.add.sprite(this.world.width/2, this.world.height/2, 'border');
+		border.anchor.x = 0.5;
+		border.anchor.y = 0.5;
+
 		var backgroundNotes = this.game.add.group();
-		for(var i = 0; i<120; i++){
+		for(var i = 0; i<60; i++){
 			var ran = Math.random();
 
 			if(ran >=0 && ran <.33){var sprite = this.game.add.sprite(this.game.world.randomX, this.game.world.randomY, 'whole_note');}

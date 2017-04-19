@@ -1,13 +1,7 @@
-var _audio;
+Accelerando.HelpMenu = function(){};
 
-Accelerando.ControlsMenu = function(){};
-
-Accelerando.ControlsMenu.prototype = {
-  init: function(audio){
-    _audio = audio;
-  },
-
-  create : function(){
+Accelerando.HelpMenu.prototype = {
+  create: function(){
     var border = this.game.add.sprite(this.world.width/2, this.world.height/2, 'border');
     border.anchor.x = 0.5;
     border.anchor.y = 0.5;
@@ -15,8 +9,8 @@ Accelerando.ControlsMenu.prototype = {
     for(var i = 0; i<60; i++){
       var ran = Math.random();
 
-      if(ran >= 0 && ran <.33){var sprite = this.game.add.sprite(this.game.world.randomX, this.game.world.randomY, 'whole_note');}
-      if(ran >= .3 && ran <.66){ var sprite = this.game.add.sprite(this.game.world.randomX, this.game.world.randomY, 'half_note');}
+      if(ran >=0 && ran <.33){var sprite = this.game.add.sprite(this.game.world.randomX, this.game.world.randomY, 'whole_note');}
+      if(ran >=.3 && ran <.66){ var sprite = this.game.add.sprite(this.game.world.randomX, this.game.world.randomY, 'half_note');}
       if(ran >= .66 && ran<1){var sprite = this.game.add.sprite(this.game.world.randomX, this.game.world.randomY, 'quarter_note');}
 
       this.game.physics.arcade.enable(sprite);
@@ -31,17 +25,16 @@ Accelerando.ControlsMenu.prototype = {
 
       sprite.body.collideWorldBounds = true;
     }
-    var logo = this.game.add.sprite(this.world.width/2, this.world.height/3, 'logo');
+    var logo = this.game.add.sprite(this.world.width/2, this.world.height - 900, 'logo');
     logo.anchor.x = 0.5;
     logo.anchor.y = 0.5;
-    var gameDirections = this.game.add.sprite(540,this.world.height/2,'controls');
+    var helpmenu = this.game.add.sprite(this.world.width/10 - 180,this.world.height/2 - 30,'help_info');
     var backButton =this.game.add.sprite(this.world.width/2 - 800, this.world.height/3, 'back_button');
     backButton.inputEnabled = true;
     backButton.events.onInputDown.add(this.loadMainMenu, this);
     _audio.play();
     _audio.loop = true;
   },
-
   loadMainMenu : function(){
     this.state.start('MainMenu', true, false, _audio);
   }
