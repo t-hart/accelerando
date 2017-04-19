@@ -40,8 +40,11 @@ Accelerando.Preload.prototype = {
     this.load.image('finish_flag', 'benchmark3/assets/images/finish_flag.png');
     this.load.image('help_info', 'benchmark3/assets/images/help_info.png');
     this.load.image('border', 'benchmark3/assets/images/border.png');
-    
-    
+
+    this.load.audio('jump','benchmark3/assets/audio/jump.mp3');
+    this.load.audio('missedNote','benchmark3/assets/audio/missedNote.mp3');
+
+
   },
   create: function() {
     this.state.start('Splash');

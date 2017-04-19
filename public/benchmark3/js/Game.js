@@ -82,6 +82,10 @@ Accelerando.Game.prototype = {
 
 	/* CREATE FUNCTION */
 	create: function() {
+		_jumpSound = this.game.add.audio('jump');
+	_missSound = this.game.add.audio('missedNote');
+
+		//this.game.sound.setDecodedCallback([ _jumpSound , _missSound ], this.update, this);
 
 		var border = this.game.add.sprite(this.world.width/2, this.world.height/2, 'border');
 		border.anchor.x = 0.5;
@@ -155,7 +159,7 @@ Accelerando.Game.prototype = {
 			_audio.pause();
 			this.state.start('Game', true, false, 2);
 		}
-		
+
 		_iKey.onDown.add(this.invincible, this);
 		_pKey.onDown.add(this.fastForward, this);
 
@@ -189,7 +193,7 @@ Accelerando.Game.prototype = {
 			/* SPAWN NOTE? */
 			if(_currentIndex >= 0)
 				distToWait = _level1Duration[_currentIndex]*100;
-			else 
+			else
 				distToWait = 0;
 			if(distToWait <= _elapsedDistance)
 				this.spawnNote();
@@ -201,6 +205,7 @@ Accelerando.Game.prototype = {
 				if(note.x <= 400){
 					note.destroy();
 					if(!_invincible){
+						_missSound.play();
 						_score-=10;
 						_salieri.x-=10;
 						_scoreText.setText("SCORE: " + _score);
@@ -509,6 +514,6 @@ Accelerando.Game.prototype = {
 	},
 
 	invincible : function(){
-		_invincible = !_invincible; 		
+		_invincible = !_invincible;
 	}
 };
