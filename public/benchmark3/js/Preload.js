@@ -19,7 +19,7 @@ Accelerando.Preload.prototype = {
     this.load.image('staff_line', 'benchmark3/assets/images/staff_line.png');
     this.load.image('treble_clef', 'benchmark3/assets/images/treble_clef.png');
     this.load.image('pause_button', 'benchmark3/assets/images/pause_button.png');
-    this.load.image('bpm_shell', 'benchmark3/assets/images/bpm_shell.png');
+    this.game.load.spritesheet('bpm_shell', 'benchmark3/assets/images/bpm_shell.png', 431, 90);
     this.load.image('button_background', 'benchmark3/assets/images/button_background.png');
     this.load.image('logo', 'benchmark3/assets/images/logo.png');
     this.load.image('play_button', 'benchmark3/assets/images/play_button.png');
@@ -40,11 +40,10 @@ Accelerando.Preload.prototype = {
     this.load.image('finish_flag', 'benchmark3/assets/images/finish_flag.png');
     this.load.image('help_info', 'benchmark3/assets/images/help_info.png');
     this.load.image('border', 'benchmark3/assets/images/border.png');
-
     this.load.audio('jump','benchmark3/assets/audio/jump.mp3');
     this.load.audio('missedNote','benchmark3/assets/audio/missedNote.mp3');
-
-
+    
+    
   },
   create: function() {
     this.state.start('Splash');
