@@ -45,6 +45,24 @@ Accelerando.Preload.prototype = {
     this.load.audio('missedNote','index/assets/audio/missedNote.mp3');
     this.load.spritesheet('mute_button', 'index/assets/images/mute_button_anim.png', 153, 76);
     
+    /* notes */
+    this.load.audio('a2', 'index/assets/audio/notes/A2.mp3');
+    this.load.audio('a3', 'index/assets/audio/notes/A3.mp3');
+    this.load.audio('a4', 'index/assets/audio/notes/A4.mp3');
+    this.load.audio('b2', 'index/assets/audio/notes/B2.mp3');
+    this.load.audio('b3', 'index/assets/audio/notes/B3.mp3');
+    this.load.audio('b4', 'index/assets/audio/notes/B4.mp3');
+    this.load.audio('c3', 'index/assets/audio/notes/C3.mp3');
+    this.load.audio('c4', 'index/assets/audio/notes/C4.mp3');
+    this.load.audio('c5', 'index/assets/audio/notes/C5.mp3');
+    this.load.audio('d3', 'index/assets/audio/notes/D3.mp3');
+    this.load.audio('d4', 'index/assets/audio/notes/D4.mp3');
+    this.load.audio('e3', 'index/assets/audio/notes/E3.mp3');
+    this.load.audio('e4', 'index/assets/audio/notes/E4.mp3');
+    this.load.audio('f3', 'index/assets/audio/notes/F3.mp3');
+    this.load.audio('f4', 'index/assets/audio/notes/F4.mp3');
+    this.load.audio('g3', 'index/assets/audio/notes/G3.mp3');
+    this.load.audio('g4', 'index/assets/audio/notes/G4.mp3');
     
   },
   create: function() {

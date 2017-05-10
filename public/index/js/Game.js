@@ -81,6 +81,11 @@ var button2;
 var _mainMenuButton;
 var mute ;
 
+var _bars;
+
+var noteDistTracker = 0;
+var barSpawned = false;
+
 Accelerando.Game = function(){};
 
 Accelerando.Game.prototype = {
@@ -92,6 +97,9 @@ Accelerando.Game.prototype = {
 		_score = 0;
 		_popUpShown = false;
 		_invincible = false;
+		noteDistTracker = 0;
+		barSpawned = false;
+		_noteVelocity = 3;
 		if(_fastForward == true){
 			_noteVelocity = 3;
 			_fastForward = false;
@@ -114,28 +122,31 @@ Accelerando.Game.prototype = {
 		_gameOver = false;
 		_paused = false;
 		_bpmAnimFrame = 0;
+		shouldJump = false;
 		var border = this.game.add.sprite(this.world.width/2, this.world.height/2, 'border');
 		border.anchor.x = 0.5;
 		border.anchor.y = 0.5;
-		_piano = new Wad({
-			source : 'sine',
-			env : {
-				attack : 0.01,
-				decay: .005,
-				sustain: .2,
-				hold: .015,
-				release: .3
-			},
-			filter : {
-				type : 'lowpass',
-				frequency: 1200,
-				q : 8.5,
-				env : {
-					attack :.2,
-					frequency: 600
-				}
-			},
-		});
+		_piano = new Audio();
+		_piano.volume = 1;
+		// _piano = new Wad({
+		// 	source : 'sine',
+		// 	env : {
+		// 		attack : 0.01,
+		// 		decay: .005,
+		// 		sustain: .2,
+		// 		hold: .015,
+		// 		release: .3
+		// 	},
+		// 	filter : {
+		// 		type : 'lowpass',
+		// 		frequency: 1200,
+		// 		q : 8.5,
+		// 		env : {
+		// 			attack :.2,
+		// 			frequency: 600
+		// 		}
+		// 	},
+		// });
 
 		// var _piano = new Wad({
 		// 	source: 'square',
@@ -188,13 +199,13 @@ Accelerando.Game.prototype = {
 		anim = _salieri.animations.add('jump', [6, 7, 8, 9, 8, 7], 10, false);
 		_salieri.scale.setTo(2);
 		_notes = this.game.add.group();
+		_bars = this.game.add.group();
 
 		_bpmBar = this.game.add.sprite((this.game.width-600)+300, (this.game.height/1.25)+20, 'bpm_shell');
 		_bpmBar.animations.add('bpm', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27], 10, false);
 		_bpmBar.anchor.y = 0.5;
 		_bpmBar.anchor.x = 0.5;
 		_notes = this.game.add.group();
-
 		anim.onComplete.add(this.switchJumpValue, this);
 
 		_sprites = this.game.add.group();
@@ -202,6 +213,12 @@ Accelerando.Game.prototype = {
 
 	/* UPDATE FUNCTION */
 	update: function() {
+
+		if(noteDistTracker%4 == 0 && noteDistTracker != 0){
+			if(!barSpawned)
+				this.spawnBar();
+		}
+
 		if(!mute && muteButton.input.pointerOver()){
 			muteButton.frame = 1;
 		}else if(mute && muteButton.input.pointerOver()){
@@ -347,6 +364,10 @@ Accelerando.Game.prototype = {
 		}
 
 		if(!_paused && !_gameOver){
+			_salieri.animations.play('run');
+		}
+
+		if(!_paused && !_gameOver){
 
 			_fKey.onDown.add(this.reader,this);
 			_gKey.onDown.add(this.reader,this);
@@ -362,13 +383,13 @@ Accelerando.Game.prototype = {
 			}
 
 			if(_currentIndex >= 0)
-				distToWait = _level1Duration[_currentIndex]*100;
+				distToWait = _level1Duration[_currentIndex]*300;
 			else
 				distToWait = 0;
 
 			/* SPAWN NOTE? */
 			if(_currentIndex >= 0)
-				distToWait = _level1Duration[_currentIndex]*100;
+				distToWait = _level1Duration[_currentIndex]*300;
 			else 
 				distToWait = 0;
 			if(distToWait <= _elapsedDistance)
@@ -377,9 +398,9 @@ Accelerando.Game.prototype = {
 			
 			//Make salieri jump if note is above an
 			_notes.forEach(function(note){			//if salieri is above or in front of blue bar
-				if((note.position.x - _salieri.position.x) <= 100 && (note.position.x - _salieri.position.x) > 20){
-					console.log(note.position.x+" "+note.position.y+" "+shouldJump+" "+_level1Duration[_currentIndex]);
-				}
+				// if((note.position.x - _salieri.position.x) <= 100 && (note.position.x - _salieri.position.x) > 20){
+				// 	console.log(note.position.x+" "+note.position.y+" "+shouldJump+" "+_level1Duration[_currentIndex]);
+				// }
 				// if(note.position.x < 480){
 				//  console.log(note.position.y);
 				// }
@@ -388,7 +409,7 @@ Accelerando.Game.prototype = {
 						if(note.position.x>=390 && note.position.y <= 352.5){		//if whole note is >= F4
 							if((note.position.x - _salieri.position.x) <= 100 && (note.position.x - _salieri.position.x) > 20){
 								shouldJump = true;
-								console.log("F4 - Jump");
+								// console.log("F4 - Jump");
 								_salieri.position.y -= 15;
 								if(!mute)
 									_jumpSound.play();
@@ -399,7 +420,7 @@ Accelerando.Game.prototype = {
 						if(note.position.x>=390 && note.position.y <= 470){
 							if((note.position.x - _salieri.position.x) <=100 && (note.position.x - _salieri.position.x) > 20){
 								shouldJump = true;
-								console.log("Quarter/Half - Jump");
+								// console.log("Quarter/Half - Jump");
 								_salieri.position.y -= ((this.game.world.height - note.position.y)/7);
 								if(!mute)
 									_jumpSound.play();
@@ -417,9 +438,10 @@ Accelerando.Game.prototype = {
 				note.x = note.x - _noteVelocity;
 				if(note.x <= 400){
 					note.destroy();
-					console.log(_level1Notes[_playedNoteIndex]);
-					console.log(_level1Duration[_playedNoteIndex]);
+					// console.log(_level1Notes[_playedNoteIndex]);
+					// console.log(_level1Duration[_playedNoteIndex]);
 					if(!_invincible){
+						this.playNote(false);
 						if(!mute)
 							_missedNoteSound.play();
 						_score-=10;
@@ -429,13 +451,21 @@ Accelerando.Game.prototype = {
 							_scoreText.setText("SCORE: " + _score);
 					}
 					else{
+						this.playNote(true);
+						
 						_bpmAnimFrame++;
 						if(_bpmAnimFrame > 27)
 							_bpmAnimFrame = 27;
 						if(_bpmAnimFrame < 0)
 							_bpmAnimFrame = 0;
 					}
-					this.playNote();
+				}
+			}, this);
+
+			_bars.forEach(function(bar){
+				bar.x = bar.x - _noteVelocity;
+				if(bar.x <= 400){
+					bar.destroy();
 				}
 			}, this);
 
@@ -575,29 +605,46 @@ Accelerando.Game.prototype = {
 			staffLine.scale.setTo(192, 0.5);
 			staff.add(staffLine);
 		}
-		if(_level == 2){
-			for(var i = 0; i < 5; i++){
+		if(_level == 1 || _level == 2){
+			for(var i = 3; i < 4; i++){
 				var staffLine = this.game.add.sprite(0, (this.game.height/2)+75*2+(i*lineOffset)-(lineOffset*2.5), 'staff_line');
-				staffLine.alpha = 0.05;
+				staffLine.alpha = 0.1;
 				staffLine.anchor.y = 0.5;
 				staffLine.scale.setTo(192, 0.5);
 				staff.add(staffLine);
 			}
-			for(var i = 0; i < 5; i++){
+			for(var i = 1; i < 2; i++){
 				var staffLine = this.game.add.sprite(0, (this.game.height/2)-75*2+(i*lineOffset)-(lineOffset*2.5), 'staff_line');
-				staffLine.alpha = 0.05;
+				staffLine.alpha = 0.1;
 				staffLine.anchor.y = 0.5;
 				staffLine.scale.setTo(192, 0.5);
 				staff.add(staffLine);
 			}
+				
 		}
+		// if(_level == 2){
+		// 	for(var i = 0; i < 5; i++){
+		// 		var staffLine = this.game.add.sprite(0, (this.game.height/2)+75*2+(i*lineOffset)-(lineOffset*2.5), 'staff_line');
+		// 		staffLine.alpha = 0.1;
+		// 		staffLine.anchor.y = 0.5;
+		// 		staffLine.scale.setTo(192, 0.5);
+		// 		staff.add(staffLine);
+		// 	}
+		// 	for(var i = 0; i < 5; i++){
+		// 		var staffLine = this.game.add.sprite(0, (this.game.height/2)-75*2+(i*lineOffset)-(lineOffset*2.5), 'staff_line');
+		// 		staffLine.alpha = 0.1;
+		// 		staffLine.anchor.y = 0.5;
+		// 		staffLine.scale.setTo(192, 0.5);
+		// 		staff.add(staffLine);
+		// 	}
+		// }
 		var trebleClef = this.game.add.sprite(5, (this.game.height/2), 'treble_clef')
 		trebleClef.anchor.x = 0;
 		trebleClef.anchor.y = 0.5;
 		trebleClef.scale.setTo(0.7);
-		var staffLine = this.game.add.sprite(400, (this.game.height/2), 'staff_line');
-		staffLine.anchor.y = 0.59;
-		staffLine.scale.setTo(0.5, (lineOffset*0.5));
+		var endOfStaff = this.game.add.sprite(400-2, this.game.height/2-35, 'staff_line');
+		endOfStaff.anchor.y = 0.5;
+		endOfStaff.scale.setTo(1, 40);
 
 		var botBanner1 = this.game.add.sprite(this.game.world.width, (this.game.height/1.25)-50, 'banner_background');
 		botBanner1.scale.setTo(-1.1, 2);
@@ -626,8 +673,16 @@ Accelerando.Game.prototype = {
 		buttonBackground.scale.setTo(1, 1);
 		this.game.world.bringToTop(_scoreText);
 
-		var bluebar = this.game.add.sprite(400, 305,'blue_bar');
-
+		// if(_level ==2){
+		// 	var bluebar = this.game.add.sprite(400, 200,'blue_bar');
+		// 	bluebar.scale.setTo(1, 1.5);
+		/*}else */if (_level == 1 || _level == 2){
+			var bluebar = this.game.add.sprite(400, 505,'blue_bar');
+			bluebar.scale.setTo(1, 1.13);
+			bluebar.anchor.y = 0.5;
+		}else{
+			var bluebar = this.game.add.sprite(400, 305,'blue_bar');
+		}
 		
 
 
@@ -702,18 +757,30 @@ Accelerando.Game.prototype = {
 		_pKey = this.game.input.keyboard.addKey(Phaser.Keyboard.P);
 	},
 
-	playNote: function(){
+	playNote: function(playNote){
 		
 		_playedNoteIndex++;
 		if(_level1Notes[_playedNoteIndex-1].toUpperCase() != 'R'){
-			if(!mute)
-				_piano.play({pitch : _level1Notes[_playedNoteIndex-1].toUpperCase()});
+			if(playNote){
+				if(!mute) {
+					if(!_piano.paused)
+						_piano.pause();
+					_piano.src = 'index/assets/audio/notes/'+_level1Notes[_playedNoteIndex-1].toUpperCase()+'.mp3';
+					_piano.loop = false;
+					_piano.play();
+				}
+			}
 		}
 		else{
 			_playedNoteIndex++;
-			if(!mute){
-				_piano.play({pitch : _level1Notes[_playedNoteIndex-1].toUpperCase()});
-				_piano.stop();
+			if(playNote){
+				if(!mute){
+					if(!_piano.paused)
+						_piano.pause();
+					_piano.src = 'index/assets/audio/notes/'+_level1Notes[_playedNoteIndex-1].toUpperCase()+'.mp3';
+					_piano.loop = false;
+					_piano.play();
+				}
 			}
 			_numRests++;
 		}
@@ -734,12 +801,14 @@ Accelerando.Game.prototype = {
 				note = this.game.add.sprite(this.game.width+40, _noteHeight, 'quarter_note');
 				note.anchor.y = 0.78823529411;
 			}
+			noteDistTracker += 1;
 		}
 		else if(_level1Duration[_currentIndex] == 2){
 			if(_level1Notes[_currentIndex] != "r"){
 				note = this.game.add.sprite(this.game.width+40, _noteHeight, 'half_note');
 				note.anchor.y = 0.78823529411;
 			}
+			noteDistTracker += 2;
 		}
 		else if(_level1Duration[_currentIndex] == 3){
 
@@ -749,10 +818,25 @@ Accelerando.Game.prototype = {
 				note = this.game.add.sprite(this.game.width+40, _noteHeight, 'whole_note');
 				note.anchor.y = 0.5;
 			}
+			noteDistTracker +=4;
+		}
+		if(barSpawned == true){
+			barSpawned = false;
 		}
 		
 		this.game.physics.enable(note, Phaser.Physics.ARCADE);
 		_notes.add(note);
+	},
+
+	spawnBar: function(){
+		var dist = (_level1Duration[_currentIndex]*300)/2;
+		bar = this.game.add.sprite(this.game.width+40+dist+35, this.game.height/2-35, 'staff_line');
+		bar.anchor.y = 0.5;
+		bar.scale.setTo(1, 40);
+		this.game.physics.enable(bar, Phaser.Physics.ARCADE);
+		_bars.add(bar);
+		barSpawned = true;
+
 	},
 
 	findNoteHeight: function(){
@@ -783,63 +867,56 @@ Accelerando.Game.prototype = {
 				note.destroy();
 				this.changeBPM(1);
 				_score = _score +10;
-				console.log("A is right");
 				_scoreText.setText("SCORE: " + _score);
-				this.playNote();
+				this.playNote(true);
 				_salieri.x+=10;
 			}
 			else if(_bKey.isDown && note.position.x>=390 && note.x<=480 && (note.position.y == 765 || note.position.y == 502.5 ||note.position.y ==240)){
 				note.destroy();
 				this.changeBPM(1);
-				console.log("B is right!");
 				_score = _score+10;
 				_scoreText.setText("SCORE: " + _score);
-				this.playNote();
+				this.playNote(true);
 				_salieri.x+=10;
 			}
 			else if(_cKey.isDown && note.position.x>=390 && note.x<=480 && (note.position.y == 727.5 || note.position.y == 465 || note.position.y ==202.5)){
 				note.destroy();
 				this.changeBPM(1);
-				console.log("C is right!");
 				_score = _score+10;
 				_scoreText.setText("SCORE: " + _score);
-				this.playNote();
+				this.playNote(true);
 				_salieri.x+=10;
 			}
 			else if(_dKey.isDown && note.position.x>=390 && note.x<=480 && (note.position.y == 690 || note.position.y == 427.5)){
 				note.destroy();
 				this.changeBPM(1);
-				console.log("D is right!");
 				_score = _score+10;
 				_scoreText.setText("SCORE: " + _score);
-				this.playNote();
+				this.playNote(true);
 				_salieri.x+=10;
 			}
 			else if(_eKey.isDown && note.position.x>=390 && note.x<=480 && (note.position.y ==652.5 || note.position.y == 390)){
 				note.destroy();
 				this.changeBPM(1);
-				console.log("E is right!");
 				_score = _score+10;
 				_scoreText.setText("SCORE: " + _score);
-				this.playNote();
+				this.playNote(true);
 				_salieri.x+=10;
 			}
 			else if(_fKey.isDown && note.position.x>=390 && note.x<=480 && (note.position.y == 615 || note.position.y == 352.5)){
 				note.destroy();
 				this.changeBPM(1);
-				console.log("F is right!");
 				_score = _score+10;
 				_scoreText.setText("SCORE: " + _score);
-				this.playNote();
+				this.playNote(true);
 				_salieri.x+=10;
 			}
 			else if(_gKey.isDown && note.position.x>=390 && note.x<=480 && (note.position.y == 577.5 || note.position.y == 315)){
 				note.destroy();
 				this.changeBPM(1);
-				console.log("G is right!");
 				_score = _score+10;
 				_scoreText.setText("SCORE: " + _score);
-				this.playNote();
+				this.playNote(true);
 				_salieri.x+=10;
 			}
 		}
@@ -868,7 +945,6 @@ Accelerando.Game.prototype = {
 		shouldJump = false;
 		//put sali back down to staff line 
 		_salieri.position.y = 220;
-		console.log("start running again");
 	},
 
 	changeBPM : function(change){
