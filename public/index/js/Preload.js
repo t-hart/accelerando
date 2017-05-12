@@ -41,7 +41,7 @@ Accelerando.Preload.prototype = {
     this.load.image('finish_flag', 'index/assets/images/finish_flag.png');
     this.load.image('help_info', 'index/assets/images/help_info_new.png');
     this.load.image('border', 'index/assets/images/border.png');
-    this.load.audio('jump','index/assets/audio/jump.mp3');
+    this.load.audio('jump','index/assets/audio/jump.wav');
     this.load.audio('missedNote','index/assets/audio/missedNote.mp3');
     this.load.spritesheet('mute_button', 'index/assets/images/mute_button_anim.png', 153, 76);
     

@@ -172,7 +172,7 @@ Accelerando.Game.prototype = {
 		if(_level == 0)
 			this.setupText();
 		_jumpSound = new Audio();
-		_jumpSound.src = "index/assets/audio/jump.mp3";
+		_jumpSound.src = "index/assets/audio/jump.wav";
 		_jumpSound.volume = 0.25;
 		_jumpSound.loop = false;
 
@@ -363,7 +363,7 @@ Accelerando.Game.prototype = {
 			_gameOver = true;
 		}
 
-		if(!_paused && !_gameOver){
+		if(!_paused && !_gameOver && !shouldJump){
 			_salieri.animations.play('run');
 		}
 
@@ -440,6 +440,12 @@ Accelerando.Game.prototype = {
 					note.destroy();
 					// console.log(_level1Notes[_playedNoteIndex]);
 					// console.log(_level1Duration[_playedNoteIndex]);
+					if(_invincible){
+						_score = _score + 10;
+						_scoreText.setText("SCORE: " + _score);
+						this.changeBPM(1);
+						_salieri.position.x += 10;
+					}
 					if(!_invincible){
 						this.playNote(false);
 						if(!mute)
